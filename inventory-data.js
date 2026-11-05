@@ -3,7 +3,7 @@ window.INVENTORY = {
   "sample": true,
   "updateLabel": "Winter 2027 update",
   "lastUpdated": "January 2027",
-  "asOf": "2027-01-15",
+  "asOf": "2027-01-16",
   "contactEmail": "utm.pmo@utoronto.ca",
   "portfolios": [
     "Advancement",
