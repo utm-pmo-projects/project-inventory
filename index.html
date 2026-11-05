@@ -23,6 +23,10 @@ button{background:none;border:0;padding:0;margin:0;font:inherit;color:inherit;te
 .slist button{display:block;width:100%;padding:6px 9px;border-left:3px solid transparent;font-size:13px;line-height:1.25}
 .slist button:hover{background:var(--tint2)}
 .slist button[aria-pressed="true"]{background:var(--tint);border-left-color:var(--bb);font-weight:bold;color:var(--ub)}
+.slist li.all{padding-bottom:10px;margin-bottom:8px;border-bottom:1px solid var(--line)}
+.slist li.all button{border:1px solid #8D8F86;border-radius:4px;padding:8px 10px;background:#fff}
+.slist li.all button:hover{background:var(--tint2)}
+.slist li.all button[aria-pressed="true"]{background:var(--tint);border-color:var(--bb);box-shadow:inset 3px 0 0 var(--bb)}
 select,input[type=search]{width:100%;height:34px;background:#fff;border:1px solid #8D8F86;border-radius:4px;padding:0 9px;font:inherit;color:var(--body)}
 input[type=search]::placeholder{color:var(--muted);opacity:1}
 .linkbtn{color:var(--link);text-decoration:underline;font-size:12.5px}
@@ -30,11 +34,13 @@ input[type=search]::placeholder{color:var(--muted);opacity:1}
 #clear[hidden]{display:none}
 .narrow{display:none}
 main{grid-area:main;padding:0 22px 22px;min-width:0}
-.top{grid-area:head;display:flex;justify-content:space-between;align-items:flex-start;gap:14px;padding:16px 22px 0;min-width:0}
+.top{grid-area:head;display:flex;flex-direction:row-reverse;justify-content:space-between;align-items:flex-start;gap:18px;padding:16px 22px 0;min-width:0}
+.titles{flex:1;min-width:0}
+.logo{flex:none;display:block;width:168px;height:auto;margin-top:-4px}
 h1{font-size:21px;line-height:1.2;color:var(--ub);font-weight:bold}
 .update{color:var(--muted);margin-top:2px}
-.tag{flex:none;border:1px solid #8D8F86;color:var(--muted);border-radius:3px;font-size:10.5px;padding:3px 7px;font-weight:bold;letter-spacing:.3px;text-transform:uppercase;white-space:nowrap}
-.samplenote{margin-top:5px;font-size:12.5px;color:var(--muted)}
+.tag{display:inline-block;border:1px solid #8D8F86;color:var(--muted);border-radius:3px;font-size:10.5px;line-height:1.3;padding:1px 6px;margin-right:6px;font-weight:bold;letter-spacing:.3px;text-transform:uppercase;white-space:nowrap}
+.samplenote{margin-top:6px;font-size:12.5px;color:var(--muted)}
 .tabs{display:flex;gap:20px;border-bottom:1px solid var(--line);margin:10px 0 9px;overflow-x:auto}
 .tabs button{display:block;padding:7px 1px 8px;font-size:14px;color:var(--muted);border-bottom:2px solid transparent;white-space:nowrap}
 .tabs button:hover{color:var(--ub)}
@@ -149,6 +155,7 @@ summary{cursor:pointer;color:var(--link);text-decoration:underline;display:inlin
 @media (forced-colors:active){
   .seg,.cbar>span,.legend i,.chev,.hm td button{forced-color-adjust:none}
   .slist button{border-left-color:Canvas}
+  .logo{forced-color-adjust:none;background:#fff;padding:4px}
   .slist button[aria-pressed="true"]{border-left-color:Highlight;outline:2px solid Highlight;outline-offset:-2px}
   .tabs button{border-bottom-color:Canvas}
   .tabs button[aria-current="page"]{border-bottom-color:Highlight}
@@ -170,6 +177,8 @@ summary{cursor:pointer;color:var(--link);text-decoration:underline;display:inlin
 @media (max-width:760px){.cols{grid-template-columns:minmax(0,1fr)}}
 @media (max-width:640px){
   .field.narrow,.field.find{grid-column:1/-1}
+  .top{flex-direction:column;gap:12px}
+  .logo{width:140px;margin-top:0}
   h1{font-size:19px}
   .hm .corner,.hm th.rowh{width:112px}
   .hm{min-width:560px}
@@ -201,12 +210,12 @@ summary{cursor:pointer;color:var(--link);text-decoration:underline;display:inlin
 <a class="skip" href="#main">Skip to results</a>
 <div class="app">
   <header class="top">
-    <div>
+    <img class="logo" src="utm-logo.png" alt="University of Toronto Mississauga" width="168" height="77">
+    <div class="titles">
       <h1>Campus Strategic Projects &amp; Initiatives Inventory</h1>
       <p class="update" id="update"></p>
-      <p class="samplenote" id="samplenote" hidden>Sample data: these projects are invented, for demonstration only.</p>
+      <p class="samplenote" id="samplenote" hidden><span class="tag">Sample data</span> These projects are invented, for demonstration only.</p>
     </div>
-    <span class="tag" id="sampletag" hidden>Sample data</span>
   </header>
   <aside class="rail" aria-label="Filters">
     <div class="rail-in">
@@ -566,8 +575,10 @@ summary{cursor:pointer;color:var(--link);text-decoration:underline;display:inlin
     b.type = 'button'; b.textContent = label; b.setAttribute('data-act', 'pf-rail'); b.setAttribute('data-v', value);
     li.appendChild(b); pfList.appendChild(li);
   }
-  pfButton('', 'All portfolios'); addOption(pfSel, '', 'All portfolios');
-  PORTFOLIOS.forEach(function (n) { pfButton(n, n); addOption(pfSel, n, n); });
+  // "All portfolios" stands apart from the list: its own box above a divider, and outside the dropdown's group.
+  pfButton('', 'All portfolios'); pfList.lastChild.className = 'all'; addOption(pfSel, '', 'All portfolios');
+  var pfGroup = document.createElement('optgroup'); pfGroup.label = 'Portfolios'; pfSel.appendChild(pfGroup);
+  PORTFOLIOS.forEach(function (n) { pfButton(n, n); addOption(pfGroup, n, n); });
   addOption(priSel, '', 'All');
   PRIORITIES.forEach(function (n) { addOption(priSel, n, n); });
   addOption(stSel, '', 'All');
@@ -580,7 +591,7 @@ summary{cursor:pointer;color:var(--link);text-decoration:underline;display:inlin
     li.appendChild(b); tabs.appendChild(li);
   });
   document.getElementById('update').textContent = [D.updateLabel, D.lastUpdated ? 'last updated ' + D.lastUpdated : ''].filter(Boolean).join(' · ');
-  if (D.sample) { document.getElementById('sampletag').hidden = false; document.getElementById('samplenote').hidden = false; }
+  if (D.sample) document.getElementById('samplenote').hidden = false;
   if (D.contactEmail) {
     var ct = document.getElementById('contact'), a = document.createElement('a');
     a.href = 'mailto:' + D.contactEmail; a.textContent = D.contactEmail;
