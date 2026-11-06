@@ -39,8 +39,6 @@ main{grid-area:main;padding:0 22px 22px;min-width:0}
 .logo{flex:none;display:block;width:168px;height:auto;margin-top:-4px}
 h1{font-size:21px;line-height:1.2;color:var(--ub);font-weight:bold}
 .update{color:var(--muted);margin-top:2px}
-.tag{display:inline-block;border:1px solid #8D8F86;color:var(--muted);border-radius:3px;font-size:10.5px;line-height:1.3;padding:1px 6px;margin-right:6px;font-weight:bold;letter-spacing:.3px;text-transform:uppercase;white-space:nowrap}
-.samplenote{margin-top:6px;font-size:12.5px;color:var(--muted)}
 .tabs{display:flex;gap:20px;border-bottom:1px solid var(--line);margin:10px 0 9px;overflow-x:auto}
 .tabs button{display:block;padding:7px 1px 8px;font-size:14px;color:var(--muted);border-bottom:2px solid transparent;white-space:nowrap}
 .tabs button:hover{color:var(--ub)}
@@ -214,7 +212,6 @@ summary{cursor:pointer;color:var(--link);text-decoration:underline;display:inlin
     <div class="titles">
       <h1>Campus Strategic Projects &amp; Initiatives Inventory</h1>
       <p class="update" id="update"></p>
-      <p class="samplenote" id="samplenote" hidden><span class="tag">Sample data</span> These projects are invented, for demonstration only.</p>
     </div>
   </header>
   <aside class="rail" aria-label="Filters">
@@ -590,8 +587,7 @@ summary{cursor:pointer;color:var(--link);text-decoration:underline;display:inlin
     b.type = 'button'; b.textContent = v[1]; b.setAttribute('data-act', 'view'); b.setAttribute('data-v', v[0]);
     li.appendChild(b); tabs.appendChild(li);
   });
-  document.getElementById('update').textContent = [D.updateLabel, D.lastUpdated ? 'last updated ' + D.lastUpdated : ''].filter(Boolean).join(' · ');
-  if (D.sample) document.getElementById('samplenote').hidden = false;
+  document.getElementById('update').textContent = D.lastUpdated ? 'Last updated ' + D.lastUpdated : '';
   if (D.contactEmail) {
     var ct = document.getElementById('contact'), a = document.createElement('a');
     a.href = 'mailto:' + D.contactEmail; a.textContent = D.contactEmail;
